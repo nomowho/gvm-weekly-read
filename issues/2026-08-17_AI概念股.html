@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI概念股的下一步：從一張名單，到一套判讀框架｜遠見線上讀 2026.08.17</title>
+<meta name="description" content="台股站上四萬八千點的這一年，投資人最常問的其實不是「還能追嗎」，而是「這一次為什麼不一樣」。 答案藏在權值結構裡。1990年台股首度攻上12682點時，前十大權值股清一色是金融與傳產；台積電要到1995年才首次擠進前十，">
+<meta property="og:title" content="AI概念股的下一步：從一張名單，到一套判讀框架｜遠見線上讀 2026.08.17">
+<meta property="og:description" content="台股站上四萬八千點的這一年，投資人最常問的其實不是「還能追嗎」，而是「這一次為什麼不一樣」。 答案藏在權值結構裡。1990年台股首度攻上12682點時，前十大權值股清一色是金融與傳產；台積電要到1995年才首次擠進前十，">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#00479D;
+    --blue-dark:#003B8F;
+    --blue-light:#E8EFF7;
+    --red:#CC0000;
+    --ink:#1A1A1A;
+    --grey:#6B7280;
+    --line:#DDE3EC;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    color:var(--ink);background:#F4F6F9;
+    -webkit-font-smoothing:antialiased;line-height:1.75;
+  }
+  .wrap{max-width:960px;margin:0 auto;background:#fff}
+
+  /* ── 報頭 ── */
+  .masthead{background:var(--blue);color:#fff;padding:28px 32px 24px}
+  .masthead-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brand{font-size:26px;font-weight:900;letter-spacing:.14em;line-height:1.2}
+  .brand small{display:block;font-size:11px;font-weight:400;letter-spacing:.3em;opacity:.75;margin-top:6px}
+  .issue-meta{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.08em;opacity:.9;text-align:right}
+  .headline{margin-top:22px;font-size:29px;font-weight:900;line-height:1.4;letter-spacing:.01em}
+  .kw{display:inline-block;margin-top:14px;padding:4px 12px;border:1px solid rgba(255,255,255,.55);
+      font-size:12px;letter-spacing:.12em;border-radius:100px}
+
+  /* ── 編者的話 ── */
+  .editor{padding:32px;background:var(--blue-light);border-bottom:1px solid var(--line)}
+  .editor-label{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .editor-label span{font-size:13px;font-weight:700;letter-spacing:.2em;color:var(--blue)}
+  .editor-label i{flex:1;height:1px;background:var(--blue);opacity:.28}
+  .editor-body{font-size:15.5px;line-height:2.05;color:#26303C;text-align:justify}
+  .editor-body p+p{margin-top:14px}
+
+  /* ── 卡片 2x2 ── */
+  .section-label{display:flex;align-items:center;gap:10px;padding:32px 32px 0}
+  .section-label span{font-size:13px;font-weight:700;letter-spacing:.2em;color:var(--blue)}
+  .section-label i{flex:1;height:1px;background:var(--line)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 32px 32px}
+  .card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);
+        overflow:hidden;background:#fff;transition:box-shadow .2s,transform .2s}
+  .card:hover{box-shadow:0 8px 24px rgba(0,71,157,.12);transform:translateY(-2px)}
+  .card-thumb{display:block;aspect-ratio:16/9;background:var(--blue-light);overflow:hidden}
+  .card-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-body{flex:1;display:flex;flex-direction:column;padding:16px 18px 18px}
+  .card-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .tag-section{background:var(--blue);color:#fff;font-size:11px;font-weight:500;padding:2px 8px;letter-spacing:.06em}
+  .tag-issue{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--grey);letter-spacing:.04em}
+  .card-title{font-size:17px;font-weight:700;line-height:1.55;letter-spacing:.01em}
+  .card-title a{color:var(--ink);text-decoration:none}
+  .card-title a:hover{color:var(--blue)}
+  .card-summary{margin-top:10px;font-size:13.5px;line-height:1.9;color:#4A5563;text-align:justify}
+  .card-meta{margin-top:12px;font-size:12px;color:var(--grey)}
+  .card-cta{margin-top:16px}
+  .btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;
+       font-size:13px;font-weight:500;letter-spacing:.06em;padding:9px 16px;
+       text-decoration:none;border-radius:var(--radius);transition:background .18s}
+  .btn:hover{background:var(--blue-dark)}
+  .btn .arrow{font-size:14px;line-height:1}
+
+  /* ── 頁尾 ── */
+  .foot{background:#1C2430;color:#9AA6B4;padding:26px 32px;font-size:12px;line-height:1.9}
+  .foot strong{color:#fff;font-weight:700;letter-spacing:.1em;display:block;margin-bottom:8px;font-size:13px}
+  .foot a{color:#8FB6E6;text-decoration:none}
+  .foot-src{margin-top:12px;padding-top:12px;border-top:1px solid #2C3745;font-family:"JetBrains Mono",monospace;font-size:11px;color:#6C7A8A}
+
+  /* ── 手機（LINE 內開啟的主要情境）── */
+  @media (max-width:720px){
+    .masthead{padding:22px 20px 20px}
+    .brand{font-size:22px}
+    .headline{font-size:23px;margin-top:18px}
+    .issue-meta{text-align:left}
+    .editor{padding:24px 20px}
+    .editor-body{font-size:15px;line-height:2}
+    .section-label{padding:24px 20px 0}
+    .grid{grid-template-columns:1fr;gap:16px;padding:16px 20px 24px}
+    .foot{padding:22px 20px}
+  }
+
+  /* ── 編輯模式（匯出時會整段移除）── */
+  #editbar{position:fixed;right:18px;bottom:18px;display:flex;gap:8px;z-index:9999;
+           font-family:"Noto Sans TC",sans-serif}
+  #editbar button{border:0;cursor:pointer;font-size:13px;font-weight:500;padding:11px 16px;
+    border-radius:100px;box-shadow:0 4px 16px rgba(0,0,0,.22);letter-spacing:.05em}
+  #btn-edit{background:var(--blue);color:#fff}
+  #btn-export{background:#fff;color:var(--blue);border:1px solid var(--blue)!important;display:none}
+  body.editing [data-edit]{outline:1px dashed rgba(0,71,157,.5);outline-offset:3px;border-radius:2px}
+  body.editing [data-edit]:focus{outline:2px solid var(--blue);background:#FFFDF0}
+  body.editing .card:hover{transform:none;box-shadow:none}
+  body.editing #btn-export{display:inline-block}
+  #edit-hint{position:fixed;left:18px;bottom:22px;z-index:9999;display:none;
+    background:#1C2430;color:#fff;font-size:12px;padding:9px 14px;border-radius:100px;opacity:.92}
+  body.editing #edit-hint{display:block}
+
+  @media print{
+    body{background:#fff}
+    #editbar,#edit-hint{display:none!important}
+    .card{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="doc">
+
+  <header class="masthead">
+    <div class="masthead-top">
+      <div class="brand">遠見線上讀<small>GLOBAL VIEWS MONTHLY</small></div>
+      <div class="issue-meta">2026.08.17<br>每週智能策展</div>
+    </div>
+    <h1 class="headline" data-edit>AI概念股的下一步：從一張名單，到一套判讀框架</h1>
+    <div class="kw" data-edit>本週主題　AI概念股</div>
+  </header>
+
+  <section class="editor">
+    <div class="editor-label"><span>編者的話</span><i></i></div>
+    <div class="editor-body" data-edit><p>台股站上四萬八千點的這一年，投資人最常問的其實不是「還能追嗎」，而是「這一次為什麼不一樣」。</p>
+        <p>答案藏在權值結構裡。1990年台股首度攻上12682點時，前十大權值股清一色是金融與傳產；台積電要到1995年才首次擠進前十，權重僅2.4％。三十年後，台灣從全球科技循環的最佳男配角，變成AI時代不可或缺的男主角，這才是本輪多頭與過去所有行情最根本的分野。</p>
+        <p>也因此，「AI概念股」這四個字正在快速失去解釋力。當基金經理人開始討論台股上看五萬點、當摩根士丹利一邊看好半導體景氣復甦、一邊對台股估值轉趨謹慎、當46家金融機構對2026年的判讀並不一致，投資人真正需要的不是一張概念股名單，而是分辨誰在賣鏟子、誰在挖金礦、誰只是站在礦區旁邊拍照。</p>
+        <p>資金面的變化同樣值得留意。台股ETF規模已突破7.2兆元，受益人數1573萬人，等於每兩個台灣人就有一人持有ETF。這意味著本輪行情的參與結構前所未有地扁平化，這既是韌性，也可能是波動的放大器。</p>
+        <p>本週我們從《遠見》紙本四篇報導出發，把這個問題拆成四個層次：現在的盤勢與策略、結構質變的成因、機構法人的判讀分歧，以及資金載體的位移。看完這四篇，你會更清楚自己站在這輪行情的哪個位置。</p></div>
+  </section>
+
+  <div class="section-label"><span>本週精選　4 篇</span><i></i></div>
+  <div class="grid">
+    <article class="card">
+      <a class="card-thumb" href="https://www.gvm.com.tw/article/131162?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">
+        <img src="https://imgs.gvm.com.tw/upload/gallery/20251211/221060.jpg" alt="台股上看五萬點！AI時代投資大策略，基金經理人告訴你" loading="lazy">
+      </a>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag-section">財經綜合</span>
+          <span class="tag-issue">2026/07　第481期</span>
+        </div>
+        <h3 class="card-title"><a href="https://www.gvm.com.tw/article/131162?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">台股上看五萬點！AI時代投資大策略，基金經理人告訴你</a></h3>
+        <p class="card-summary" data-edit>台股加權指數從年初不到三萬點一路攀升，最高觸及48218點，漲幅超過六成，躍居全球第五大股票市場。高檔之際究竟昂貴還是便宜？《遠見》專訪多位基金經理人，安聯大壩基金經理人蕭惠中直言，以過去的評價來看台股一定是貴的，但AI已讓台股產生結構性改變。本文完整收錄下半年的產業佈局建議。</p>
+        <p class="card-meta">段詩潔　｜　《台灣財富新賽局》</p>
+        <div class="card-cta">
+          <a class="btn" href="https://www.gvm.com.tw/article/131162?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">閱讀全文<span class="arrow">➔</span></a>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <a class="card-thumb" href="https://www.gvm.com.tw/article/128227?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">
+        <img src="https://imgs.gvm.com.tw/upload/gallery/20260223/225852.jpg" alt="台股還能追嗎？30年資歷投資長：AI撐起的長多格局才開始" loading="lazy">
+      </a>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag-section">財經綜合</span>
+          <span class="tag-issue">2026/03　第477期</span>
+        </div>
+        <h3 class="card-title"><a href="https://www.gvm.com.tw/article/128227?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">台股還能追嗎？30年資歷投資長：AI撐起的長多格局才開始</a></h3>
+        <p class="card-summary" data-edit>台股一個月大漲4000點、挑戰33000點，是新常態還是天花板？擁30年資歷的投資長從權值股結構給出答案：1990年台股首上12682點時，前十大權值股全是金融與傳產，台積電1995年才首度入榜、權重僅2.4％。台灣從科技循環的最佳男配角變成AI時代的男主角，才是這輪長多的真正起點。</p>
+        <p class="card-meta">段詩潔　｜　《紅不讓經濟學》</p>
+        <div class="card-cta">
+          <a class="btn" href="https://www.gvm.com.tw/article/128227?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">閱讀全文<span class="arrow">➔</span></a>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <a class="card-thumb" href="https://www.gvm.com.tw/article/126176?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">
+        <img src="https://imgs.gvm.com.tw/upload/gallery/20251124/219689.jpg" alt="獨家調查》2026台股投資必看！AI概念股與熱門個股搶先揭曉" loading="lazy">
+      </a>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag-section">封面故事</span>
+          <span class="tag-issue">2025/12　第474期</span>
+        </div>
+        <h3 class="card-title"><a href="https://www.gvm.com.tw/article/126176?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">獨家調查》2026台股投資必看！AI概念股與熱門個股搶先揭曉</a></h3>
+        <p class="card-summary" data-edit>《遠見》2026投資趨勢大調查獨家掌握46家金融機構的判讀，一次看懂景氣走向、產業強弱與資金流向。值得注意的是機構立場並不一致：摩根士丹利對亞洲供應鏈與科技循環維持中性偏正向，卻對台股明顯轉趨謹慎，指出台灣基本面雖不悲觀，但估值與市場結構仍有壓力，短期可能面臨較大震盪風險。</p>
+        <p class="card-meta">段詩潔　｜　《突圍焦慮時代》</p>
+        <div class="card-cta">
+          <a class="btn" href="https://www.gvm.com.tw/article/126176?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">閱讀全文<span class="arrow">➔</span></a>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <a class="card-thumb" href="https://www.gvm.com.tw/article/126972?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">
+        <img src="https://imgs.gvm.com.tw/upload/gallery/20251226/222208.jpg" alt="台股ETF成全民投資關鍵字！規模衝破7.2兆，2026投資解密" loading="lazy">
+      </a>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag-section">財經綜合</span>
+          <span class="tag-issue">2026/01　第475期</span>
+        </div>
+        <h3 class="card-title"><a href="https://www.gvm.com.tw/article/126972?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">台股ETF成全民投資關鍵字！規模衝破7.2兆，2026投資解密</a></h3>
+        <p class="card-summary" data-edit>ETF是台股近年最火熱的關鍵字。截至2025年11月底，全台ETF總規模突破7.2兆元，在11.1兆元的整體基金市場中占比達65％，創歷史新高；受益人數達1573萬人，其中台股ETF為1202萬人，相當於每兩個台灣人就有一人持有。相較2019年底的46萬人，短短幾年暴增25倍。</p>
+        <p class="card-meta">段詩潔　｜　《決勝AI智慧島》</p>
+        <div class="card-cta">
+          <a class="btn" href="https://www.gvm.com.tw/article/126972?utm_source=line&amp;utm_medium=social&amp;utm_campaign=gvm_digital_AIA&amp;utm_content=gvm_digital_AIA_0817&amp;from=line" target="_blank" rel="noopener">閱讀全文<span class="arrow">➔</span></a>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <footer class="foot">
+    <strong>遠見線上讀｜每週智能策展</strong>
+    本期文章全數選自《遠見雜誌》紙本內容，點擊卡片即可閱讀全文。
+    訂閱紙本雜誌請洽 <a href="https://www.gvm.com.tw/magazine">遠見雜誌</a>。
+    <div class="foot-src">選文來源：gvm.com.tw/magazine/published（紙本期別目錄）｜產出日 2026-08-17｜索引 29,583 篇</div>
+  </footer>
+
+</div>
+
+<div id="edit-hint">編輯模式：直接點文字修改，改完按「匯出乾淨版」</div>
+<div id="editbar">
+  <button id="btn-export" type="button">⬇ 匯出乾淨版</button>
+  <button id="btn-edit" type="button">✎ 編輯</button>
+</div>
+
+<script>
+(function () {
+  var editing = false;
+  var btnEdit = document.getElementById('btn-edit');
+  var btnExport = document.getElementById('btn-export');
+  var targets = document.querySelectorAll('[data-edit]');
+
+  btnEdit.addEventListener('click', function () {
+    editing = !editing;
+    document.body.classList.toggle('editing', editing);
+    targets.forEach(function (el) {
+      el.setAttribute('contenteditable', editing ? 'true' : 'false');
+    });
+    btnEdit.textContent = editing ? '✓ 完成編輯' : '✎ 編輯';
+    if (editing && targets.length) targets[0].focus();
+  });
+
+  btnExport.addEventListener('click', function () {
+    // 複製整份 DOM，移除編輯器 UI 與編輯痕跡，輸出乾淨 HTML
+    var clone = document.documentElement.cloneNode(true);
+    ['editbar', 'edit-hint'].forEach(function (id) {
+      var n = clone.querySelector('#' + id);
+      if (n) n.remove();
+    });
+    clone.querySelectorAll('script').forEach(function (s) { s.remove(); });
+    clone.querySelectorAll('[contenteditable]').forEach(function (el) {
+      el.removeAttribute('contenteditable');
+    });
+    var body = clone.querySelector('body');
+    if (body) body.classList.remove('editing');
+
+    var html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '2026-08-17_AI概念股_edited.html';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  });
+})();
+</script>
+</body>
+</html>
