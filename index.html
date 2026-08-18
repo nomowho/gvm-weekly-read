@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>遠見線上讀 產生器</title>
-<meta name="description" content="輸入一個主題，自動從 29,583 篇《遠見雜誌》紙本文章中挑出 4 篇相關報導，產出可直接發送的每週導讀網頁。">
+<meta name="description" content="輸入一個主題，自動從 29,583 篇《遠見雜誌》紙本文章中挑出 4 篇相關報導並生成編者的話，產出可直接發送的每週導讀網頁。">
 <meta property="og:title" content="遠見線上讀 產生器">
 <meta property="og:description" content="輸入一個主題，自動從《遠見雜誌》紙本文章挑出 4 篇相關報導，產出每週導讀網頁。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,18 +23,18 @@
   button{cursor:pointer}
   :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
-  /* ── 頁首 ── */
   .top{background:var(--blue);color:#fff;padding:22px 28px}
   .top-in{max-width:1400px;margin:0 auto;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .logo{font-size:22px;font-weight:900;letter-spacing:.14em}
   .logo small{display:block;font-size:10px;font-weight:400;letter-spacing:.3em;opacity:.75;margin-top:5px}
-  .top-note{font-size:12px;opacity:.85;font-family:var(--mono)}
+  .top-note{font-size:12px;opacity:.9;font-family:var(--mono)}
   .top-note a{color:#fff}
 
   .shell{max-width:1400px;margin:0 auto;padding:24px 28px 60px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
   @media (max-width:1080px){ .shell{grid-template-columns:1fr;padding:20px 16px 48px;gap:20px} }
 
   .panel{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .panel+.panel{margin-top:20px}
   .panel-h{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);background:#FBFCFE}
   .panel-h b{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--blue)}
   .panel-h .step{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;
@@ -42,7 +42,6 @@
   .panel-h .hint{margin-left:auto;font-size:12px;color:var(--grey)}
   .panel-b{padding:20px}
 
-  /* ── 搜尋 ── */
   .searchrow{display:flex;gap:10px;flex-wrap:wrap}
   .searchrow input[type=text]{flex:1;min-width:200px;padding:13px 16px;border:1.5px solid var(--line);border-radius:4px;font-size:16px}
   .searchrow input[type=text]:focus{border-color:var(--blue);outline:none}
@@ -55,13 +54,11 @@
   .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
   .chip{background:var(--blue-light);color:var(--blue);border:0;border-radius:100px;padding:6px 13px;font-size:12.5px;font-weight:500}
   .chip:hover{background:var(--blue);color:#fff}
-  .status{margin-top:14px;font-size:13px;color:var(--grey);font-family:var(--mono)}
+  .status{margin-top:14px;font-size:13px;color:var(--grey);font-family:var(--mono);line-height:1.7}
   .status.err{color:var(--red)}
 
-  /* ── 選中的四篇 ── */
   .picked{display:flex;flex-direction:column;gap:12px}
   .pick{display:flex;gap:12px;padding:12px;border:1px solid var(--line);border-radius:5px;background:#fff}
-  .pick.drag-over{border-color:var(--blue);background:var(--blue-light)}
   .pick-n{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;font-weight:700;
     display:grid;place-items:center;flex:none;margin-top:2px}
   .pick-main{flex:1;min-width:0}
@@ -78,7 +75,6 @@
   .count{font-size:11px;color:var(--grey);font-family:var(--mono);margin-left:auto}
   .count.over{color:var(--red)}
 
-  /* ── 候選 ── */
   .cands{margin-top:16px;border-top:1px dashed var(--line);padding-top:16px}
   .cands h4{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--grey);margin-bottom:10px}
   .cand-list{max-height:330px;overflow-y:auto;display:flex;flex-direction:column;gap:7px;padding-right:4px}
@@ -91,12 +87,11 @@
   .cand-x{flex:1;min-width:0}
   .cand-m{font-size:11px;color:var(--grey);margin-top:3px}
 
-  /* ── 文案 ── */
   .field{margin-bottom:16px}
   .field label{display:block;font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--grey);margin-bottom:7px}
   .field input,.field textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:4px;font-size:14px;line-height:1.8}
   .field input:focus,.field textarea:focus{border-color:var(--blue);outline:none}
-  .field textarea{min-height:190px;resize:vertical}
+  .field textarea{min-height:200px;resize:vertical}
   .field .row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
   .field .row label{margin:0}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -108,10 +103,9 @@
   .btn1{background:var(--blue);color:#fff;border:1.5px solid var(--blue);border-radius:4px;padding:11px 22px;font-weight:700;font-size:13.5px}
   .btn1:hover{background:var(--blue-dark);border-color:var(--blue-dark)}
 
-  /* ── 預覽 ── */
   .preview-wrap{position:sticky;top:20px}
   @media (max-width:1080px){ .preview-wrap{position:static} }
-  .frame{width:100%;height:74vh;min-height:520px;border:0;background:#fff;display:block}
+  .frame{width:100%;height:74vh;min-height:520px;border:0;background:#fff;display:block;margin:0 auto}
   @media (max-width:1080px){ .frame{height:60vh} }
   .pvbar{display:flex;gap:8px;align-items:center;padding:10px 20px;border-top:1px solid var(--line);background:#FBFCFE;flex-wrap:wrap}
   .pvbar .seg{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
@@ -122,18 +116,20 @@
   .empty b{display:block;font-size:15px;color:var(--ink);margin-bottom:6px}
 
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#1C2430;color:#fff;
-    padding:11px 22px;border-radius:100px;font-size:13.5px;z-index:99;opacity:0;pointer-events:none;transition:opacity .25s}
+    padding:11px 22px;border-radius:100px;font-size:13.5px;z-index:99;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90vw;text-align:center}
   .toast.on{opacity:.95}
 
-  dialog{border:0;border-radius:8px;padding:0;max-width:720px;width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  dialog{border:0;border-radius:8px;padding:0;max-width:760px;width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.3)}
   dialog::backdrop{background:rgba(16,24,36,.55)}
   .dlg-h{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
   .dlg-h b{font-size:14px;letter-spacing:.1em;color:var(--blue)}
   .dlg-h button{margin-left:auto;background:none;border:0;font-size:20px;color:var(--grey);line-height:1}
   .dlg-b{padding:20px 22px 24px}
   .dlg-b p{font-size:13.5px;color:var(--grey);margin-bottom:12px;line-height:1.9}
-  .dlg-b textarea{width:100%;height:280px;padding:13px;border:1px solid var(--line);border-radius:4px;
+  .dlg-b textarea{width:100%;height:260px;padding:13px;border:1px solid var(--line);border-radius:4px;
     font-family:var(--mono);font-size:12px;line-height:1.7;resize:vertical}
+  .dlg-b input[type=text]{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:4px;
+    font-family:var(--mono);font-size:12px}
 </style>
 </head>
 <body>
@@ -147,14 +143,13 @@
 
 <div class="shell">
 
-  <!-- 左欄：操作 -->
   <div>
     <section class="panel">
-      <div class="panel-h"><span class="step">1</span><b>輸入主題</b><span class="hint">自動挑出 4 篇相關報導</span></div>
+      <div class="panel-h"><span class="step">1</span><b>輸入主題</b><span class="hint">自動選文＋自動生成編者的話</span></div>
       <div class="panel-b">
         <div class="searchrow">
           <input type="text" id="kw" placeholder="例如：半導體、AI概念股、永續金融、精品消費" autocomplete="off">
-          <button class="btn-go" id="go" disabled>自動選文</button>
+          <button class="btn-go" id="go" disabled>一鍵產生</button>
         </div>
         <div class="opts">
           <label>年份
@@ -174,11 +169,11 @@
       </div>
     </section>
 
-    <section class="panel" style="margin-top:20px">
-      <div class="panel-h"><span class="step">2</span><b>選出的四篇</b><span class="hint">摘要已帶入遠見官方版本，可改</span></div>
+    <section class="panel">
+      <div class="panel-h"><span class="step">2</span><b>選出的四篇</b><span class="hint">摘要已帶入遠見官方版本</span></div>
       <div class="panel-b">
         <div id="pickedWrap">
-          <div class="empty"><b>還沒有選文</b>在上面輸入一個主題，按「自動選文」</div>
+          <div class="empty"><b>還沒有選文</b>在上面輸入一個主題，按「一鍵產生」</div>
         </div>
         <div class="cands" id="candsWrap" hidden>
           <h4>其他候選（點一下替換上面的第 <span id="swapTarget">1</span> 篇）</h4>
@@ -187,21 +182,22 @@
       </div>
     </section>
 
-    <section class="panel" style="margin-top:20px">
-      <div class="panel-h"><span class="step">3</span><b>文案與設定</b></div>
+    <section class="panel">
+      <div class="panel-h"><span class="step">3</span><b>編者的話</b><span class="hint">依四篇實際內容自動組稿</span></div>
       <div class="panel-b">
         <div class="field">
           <label for="title">主標題</label>
-          <input type="text" id="title" placeholder="按「自動選文」後會給你一個建議標題">
+          <input type="text" id="title" placeholder="產生後會自動帶入建議標題">
         </div>
         <div class="field">
           <div class="row">
-            <label for="note" style="flex:1">編者的話（建議 300～500 字）</label>
+            <label for="note" style="flex:1">導讀內文（建議 300～500 字）</label>
             <span class="count" id="noteCount">0 字</span>
           </div>
-          <textarea id="note" placeholder="寫一段貫穿四篇的觀點，讓讀者知道為什麼這四篇該一起讀。&#10;&#10;不想自己寫的話，按下面的「複製 AI 提示詞」，貼到任何 AI（ChatGPT／Gemini／Claude 都行），把回覆貼回來即可。"></textarea>
+          <textarea id="note" placeholder="按「一鍵產生」後會自動依四篇文章組出草稿，可直接改。"></textarea>
           <div class="actions" style="margin-top:10px">
-            <button class="btn2" id="promptBtn">複製 AI 提示詞</button>
+            <button class="btn2" id="regenBtn">重新生成</button>
+            <button class="btn2" id="promptBtn">用 AI 潤稿</button>
           </div>
         </div>
         <div class="grid2">
@@ -218,18 +214,16 @@
     </section>
   </div>
 
-  <!-- 右欄：預覽 -->
   <div class="preview-wrap">
     <section class="panel">
-      <div class="panel-h"><span class="step">4</span><b>即時預覽</b><span class="hint" id="pvhint">選完文就會出現</span></div>
+      <div class="panel-h"><span class="step">4</span><b>即時預覽</b><span class="hint" id="pvhint">產生後就會出現</span></div>
       <iframe class="frame" id="frame" title="預覽"></iframe>
       <div class="pvbar">
         <div class="seg">
           <button id="vwDesk" class="on">桌機</button>
           <button id="vwMob">手機</button>
         </div>
-        <button class="btn2" id="copyBtn">複製 HTML</button>
-        <button class="btn1" id="dlBtn">下載網頁</button>
+        <button class="btn1" id="shareBtn">複製分享連結</button>
       </div>
     </section>
   </div>
@@ -237,10 +231,11 @@
 </div>
 
 <dialog id="dlg">
-  <div class="dlg-h"><b>AI 提示詞</b><button id="dlgX" aria-label="關閉">×</button></div>
+  <div class="dlg-h"><b id="dlgTitle">AI 提示詞</b><button id="dlgX" aria-label="關閉">×</button></div>
   <div class="dlg-b">
-    <p>已經幫你把四篇文章的真實標題、期別與官方摘要組進去了。貼到任何 AI，把回覆貼回「編者的話」欄位即可。因為資料都在提示詞裡，AI 只負責寫文案、不需要自己查資料，所以不會編造內容。</p>
+    <p id="dlgNote"></p>
     <textarea id="dlgTxt" readonly></textarea>
+    <input type="text" id="dlgUrl" readonly hidden>
     <div class="actions" style="margin-top:12px">
       <button class="btn1" id="dlgCopy">複製到剪貼簿</button>
     </div>
@@ -249,17 +244,15 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="assets/gvm-render.js"></script>
 <script>
 (function () {
   'use strict';
 
-  // ═══ 常數 ═══════════════════════════════════════════════════════════════
-  var BRAND = { blue:'#00479D', blueDark:'#003B8F', blueLight:'#E8EFF7', ink:'#1A1A1A', grey:'#6B7280', line:'#DDE3EC' };
-  var FIELD_WEIGHT = { t:3.0, e:2.2, m:1.2, s:0.6, a:0.4 };  // 標題/摘要/期主題/分類/作者
-  var HALF_LIFE = 18;   // 近期加權半衰期（月）
+  var FIELD_WEIGHT = { t:3.0, e:2.2, m:1.2, s:0.6, a:0.4 };
+  var HALF_LIFE = 18;
   var PICK_N = 4;
 
-  // 語意擴詞表：涵蓋遠見主要客戶產業。輸入詞命中任一 key 就把整組詞帶進來。
   var SYNONYMS = {
     'AI':['AI','人工智慧','生成式','大模型','演算法','機器學習','智慧','GPT','算力'],
     '半導體':['半導體','晶片','晶圓','台積電','先進封裝','製程','IC','矽','記憶體'],
@@ -279,15 +272,11 @@
     '觀光':['觀光','旅遊','飯店','航空','餐旅','文化','城市']
   };
 
-  // ═══ 狀態 ═══════════════════════════════════════════════════════════════
   var DATA = null, IMG_PREFIX = '';
-  var picked = [];        // 目前選中的四篇（含 summary）
-  var pool = [];          // 目前搜尋的候選池（已排序）
-  var swapIndex = 0;      // 候選清單點擊時要替換第幾篇
+  var picked = [], pool = [], swapIndex = 0, regenSeed = 0;
 
-  // ═══ 小工具 ═════════════════════════════════════════════════════════════
   var $ = function (id) { return document.getElementById(id); };
-  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  var esc = function (s) { return window.GVM.esc(s); };
   function chars(s){ return String(s||'').replace(/\s/g,'').length; }
   function imgUrl(g){ return !g ? '' : (/^https?:/.test(g) ? g : IMG_PREFIX + g); }
   function artUrl(id){ return 'https://www.gvm.com.tw/article/' + id; }
@@ -295,36 +284,32 @@
   var toastTimer;
   function toast(msg){
     var t = $('toast'); t.textContent = msg; t.classList.add('on');
-    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 2000);
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 2600);
   }
 
   function copyText(text, okMsg){
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function(){ toast(okMsg); },
-        function(){ fallbackCopy(text, okMsg); });
+      navigator.clipboard.writeText(text).then(function(){ toast(okMsg); }, function(){ fallbackCopy(text, okMsg); });
     } else { fallbackCopy(text, okMsg); }
   }
   function fallbackCopy(text, okMsg){
     var ta = document.createElement('textarea');
-    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); toast(okMsg); }
-    catch(e){ toast('複製失敗，請手動選取'); }
+    try { document.execCommand('copy'); toast(okMsg); } catch (e) { toast('複製失敗，請手動選取'); }
     ta.remove();
   }
 
   // ═══ 檢索 ═══════════════════════════════════════════════════════════════
   function expand(input){
-    var raw = String(input||'').trim();
+    var raw = String(input || '').trim();
     if (!raw) return [];
-    var terms = [raw];
-    var lower = raw.toLowerCase();
-    Object.keys(SYNONYMS).forEach(function(key){
+    var terms = [raw], lower = raw.toLowerCase();
+    Object.keys(SYNONYMS).forEach(function (key) {
       if (lower.indexOf(key.toLowerCase()) !== -1 || key.toLowerCase().indexOf(lower) !== -1) {
-        SYNONYMS[key].forEach(function(t){ if (terms.indexOf(t) === -1) terms.push(t); });
+        SYNONYMS[key].forEach(function (t) { if (terms.indexOf(t) === -1) terms.push(t); });
       }
     });
-    // 沒命中同義詞表，且是較長的中文詞 → 拆成 2 字片語當弱關鍵詞
     if (terms.length === 1 && raw.length >= 4 && /[一-鿿]/.test(raw)) {
       for (var i = 0; i + 2 <= raw.length; i++) {
         var bi = raw.substr(i, 2);
@@ -359,25 +344,21 @@
       if (opts.since && parseInt(r.y.slice(0,4),10) < opts.since) continue;
       var raw = 0, matched = 0;
       for (var j = 0; j < terms.length; j++) {
-        var term = terms[j], ts = 0;
+        var ts = 0;
         for (var f in FIELD_WEIGHT) {
-          var c = hits(r[f], term);
+          var c = hits(r[f], terms[j]);
           if (c) ts += FIELD_WEIGHT[f] * Math.min(c, 3);
         }
-        // 原始輸入詞給額外權重，避免被擴充詞稀釋
         if (j === 0) ts *= 1.6;
         if (ts > 0) { raw += ts; matched++; }
       }
       if (raw <= 0) continue;
-      var breadth = 1 + 0.3 * (matched - 1);
-      var score = raw * breadth * (opts.recency ? recency(r) : 1);
-      out.push({ rec: r, score: score });
+      out.push({ rec: r, score: raw * (1 + 0.3 * (matched - 1)) * (opts.recency ? recency(r) : 1) });
     }
-    out.sort(function(a,b){ return b.score - a.score; });
+    out.sort(function (a, b) { return b.score - a.score; });
     return { terms: terms, results: out };
   }
 
-  // 自動挑 N 篇：分數優先，但避免同一期擠滿版面
   function autoPick(results, n, diverse){
     var chosen = [], usedIssue = {}, usedSection = {};
     function key(r){ return r.y + '|' + r.m; }
@@ -390,25 +371,77 @@
         usedSection[r.s] = (usedSection[r.s] || 0) + 1;
       }
     }
-    // 不夠就放寬條件補滿
     for (var j = 0; j < results.length && chosen.length < n; j++) {
-      var rr = results[j].rec;
-      if (chosen.indexOf(rr) === -1) chosen.push(rr);
+      if (chosen.indexOf(results[j].rec) === -1) chosen.push(results[j].rec);
     }
-    return chosen;
+    // 讀起來有時序感：由舊到新，最後一篇是最新的
+    return chosen.sort(function (a, b) { return String(a.y).localeCompare(String(b.y)); });
   }
 
-  // ═══ 渲染：操作區 ═══════════════════════════════════════════════════════
+  // ═══ 自動生成編者的話 ═══════════════════════════════════════════════════
+  // 每一句都由四篇文章的真實資料組成（標題、期別、分類、遠見官方摘要），
+  // 不會產生任何原文沒有的事實。連接詞只負責串接，不做推論。
+  function firstSentence(text, max){
+    var s = String(text || '').trim();
+    if (!s) return '';
+    var cut = s.search(/[。！？]/);
+    if (cut !== -1 && cut + 1 <= (max || 90)) s = s.slice(0, cut + 1);
+    else s = s.slice(0, max || 90) + (s.length > (max || 90) ? '…' : '');
+    return s.replace(/^[，、。\s]+/, '');
+  }
+
+  function monthsBetween(a, b){
+    var pa = a.split('/'), pb = b.split('/');
+    return Math.abs((parseInt(pb[0],10) - parseInt(pa[0],10)) * 12 + (parseInt(pb[1],10) - parseInt(pa[1],10)));
+  }
+
+  function generateNote(kw){
+    if (!picked.length) return '';
+    var ys = picked.map(function (p) { return p.y; }).filter(Boolean).sort();
+    var oldest = ys[0], newest = ys[ys.length - 1];
+    var span = (oldest && newest) ? monthsBetween(oldest, newest) : 0;
+    var sections = [];
+    picked.forEach(function (p) { if (p.s && sections.indexOf(p.s) === -1) sections.push(p.s); });
+
+    var OPEN = [
+      '關於「' + kw + '」，《遠見》紙本這幾期累積了不少第一手觀察。本週選出的四篇，出刊時間從 ' + oldest + ' 橫跨到 ' + newest +
+        '，分屬' + sections.join('、') + '，四篇擺在一起讀，剛好能看見這個題目的不同切面。',
+      '這一週我們把鏡頭對準「' + kw + '」。四篇報導取自《遠見》' + oldest + ' 到 ' + newest + ' 的紙本內容，' +
+        '橫跨' + sections.join('、') + '，各自站在不同位置回答同一個問題。'
+    ];
+
+    var LEAD = [
+      ['首先，', '接著，', '另一個角度是，', '最後，'],
+      ['第一篇，', '第二篇，', '第三篇，', '壓軸的一篇，']
+    ];
+    var leads = LEAD[regenSeed % LEAD.length];
+
+    var body = picked.map(function (p, i) {
+      var sum = firstSentence(p.summary, 92);
+      var head = leads[i] + '〈' + p.t + '〉（' + p.y + ' ' + p.n + '）';
+      return sum ? head + sum : head + '從' + (p.s || '該版面') + '的角度切入這個題目。';
+    }).join('\n\n');
+
+    var CLOSE = [
+      '這四篇分屬' + sections.length + ' 個版面' + (span ? '，出刊時間也拉開了 ' + span + ' 個月' : '') +
+        '。同一個題目在不同時間點、不同版面上呈現的樣貌，往往比單篇報導更能看出趨勢走向。建議依序讀完，再回頭看第一篇。',
+      '把這四篇放在一起，不是因為它們談的是同一件事，而是它們從不同位置回答了同一個問題' +
+        (span ? '，而且中間隔了 ' + span + ' 個月' : '') + '。順著讀下來，「' + kw + '」的輪廓會比看單篇清楚得多。'
+    ];
+
+    return OPEN[regenSeed % OPEN.length] + '\n\n' + body + '\n\n' + CLOSE[regenSeed % CLOSE.length];
+  }
+
+  // ═══ 渲染 ═══════════════════════════════════════════════════════════════
   function renderPicked(){
     var wrap = $('pickedWrap');
     if (!picked.length) {
-      wrap.innerHTML = '<div class="empty"><b>還沒有選文</b>在上面輸入一個主題，按「自動選文」</div>';
+      wrap.innerHTML = '<div class="empty"><b>還沒有選文</b>在上面輸入一個主題，按「一鍵產生」</div>';
       return;
     }
-    var html = '<div class="picked">';
-    picked.forEach(function(p, i){
-      var over = chars(p.summary) > 170;
-      html += '<div class="pick">' +
+    wrap.innerHTML = '<div class="picked">' + picked.map(function (p, i) {
+      var n = chars(p.summary);
+      return '<div class="pick">' +
         '<div class="pick-n">' + (i+1) + '</div>' +
         '<div class="pick-main">' +
           '<div class="pick-t"><a href="' + artUrl(p.i) + '" target="_blank" rel="noopener">' + esc(p.t) + '</a></div>' +
@@ -418,175 +451,77 @@
             '<button class="mini" data-act="swap" data-i="' + i + '">換一篇</button>' +
             '<button class="mini" data-act="up" data-i="' + i + '">上移</button>' +
             '<button class="mini" data-act="down" data-i="' + i + '">下移</button>' +
-            '<span class="count' + (over ? ' over' : '') + '" data-c="' + i + '">' + chars(p.summary) + ' 字</span>' +
+            '<span class="count' + (n > 170 ? ' over' : '') + '" data-c="' + i + '">' + n + ' 字</span>' +
           '</div>' +
         '</div></div>';
-    });
-    html += '</div>';
-    wrap.innerHTML = html;
+    }).join('') + '</div>';
   }
 
   function renderCands(){
-    var box = $('cands');
-    var chosenIds = picked.map(function(p){ return p.i; });
-    var list = pool.slice(0, 40);
-    box.innerHTML = list.map(function(x){
-      var r = x.rec, used = chosenIds.indexOf(r.i) !== -1;
-      return '<button class="cand' + (used ? ' used' : '') + '" data-id="' + r.i + '">' +
+    var chosenIds = picked.map(function (p) { return p.i; });
+    $('cands').innerHTML = pool.slice(0, 40).map(function (x) {
+      var r = x.rec;
+      return '<button class="cand' + (chosenIds.indexOf(r.i) !== -1 ? ' used' : '') + '" data-id="' + r.i + '">' +
         '<span class="cand-s">' + x.score.toFixed(1) + '</span>' +
         '<span class="cand-x"><span>' + esc(r.t) + '</span>' +
         '<span class="cand-m">' + esc(r.y) + '　' + esc(r.n) + '　' + esc(r.s) + '　' + esc(r.a || '遠見編輯部') + '</span></span>' +
         '</button>';
     }).join('');
-    $('candsWrap').hidden = !list.length;
+    $('candsWrap').hidden = !pool.length;
   }
 
-  // ═══ 產出網頁 ═══════════════════════════════════════════════════════════
-  function utmQuery(){
-    var d = $('date').value || new Date().toISOString().slice(0,10);
-    var parts = d.split('-');
-    var mmdd = (parts[1] || '') + (parts[2] || '');
-    var camp = ($('campaign').value || 'gvm_digital_AIA').trim();
-    return 'utm_source=line&utm_medium=social&utm_campaign=' + camp +
-           '&utm_content=' + camp + '_' + mmdd + '&from=line';
-  }
-  function linkFor(id){ return artUrl(id) + '?' + utmQuery(); }
-
-  function paragraphs(text){
-    return String(text||'').trim().split(/\n\s*\n+/).map(function(p){
-      return '<p>' + esc(p.replace(/\n/g,' ')).trim() + '</p>';
-    }).join('');
-  }
-
-  function buildPage(){
-    var d = $('date').value || new Date().toISOString().slice(0,10);
-    var dp = d.split('-');
-    var dateLabel = dp[0] + '.' + dp[1] + '.' + dp[2];
-    var title = $('title').value || '本週精選';
-    var note = $('note').value || '';
-    var kw = $('kw').value || '—';
-
-    var cards = picked.map(function(p){
-      var href = esc(linkFor(p.i));
-      var img = imgUrl(p.g);
-      return '<article class="card">' +
-        (img ? '<a class="card-thumb" href="' + href + '" target="_blank" rel="noopener"><img src="' + esc(img) + '" alt="' + esc(p.t) + '" loading="lazy"></a>' : '') +
-        '<div class="card-body">' +
-          '<div class="card-tags">' +
-            (p.s ? '<span class="tag-section">' + esc(p.s) + '</span>' : '') +
-            '<span class="tag-issue">' + esc(p.y + '　' + p.n) + '</span>' +
-          '</div>' +
-          '<h3 class="card-title"><a href="' + href + '" target="_blank" rel="noopener">' + esc(p.t) + '</a></h3>' +
-          '<p class="card-summary">' + esc(p.summary) + '</p>' +
-          '<p class="card-meta">' + esc(p.a || '遠見編輯部') + '　｜　《' + esc(p.m) + '》</p>' +
-          '<div class="card-cta"><a class="btn" href="' + href + '" target="_blank" rel="noopener">閱讀全文<span class="arrow">➔</span></a></div>' +
-        '</div></article>';
-    }).join('');
-
-    return '<!DOCTYPE html>\n<html lang="zh-Hant-TW"><head><meta charset="utf-8">' +
-      '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-      '<title>' + esc(title) + '｜遠見線上讀 ' + dateLabel + '</title>' +
-      '<meta name="description" content="' + esc(note.replace(/\s+/g,' ').slice(0,110)) + '">' +
-      '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
-      '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">' +
-      '<style>' +
-      ':root{--blue:' + BRAND.blue + ';--blue-dark:' + BRAND.blueDark + ';--blue-light:' + BRAND.blueLight +
-      ';--ink:' + BRAND.ink + ';--grey:' + BRAND.grey + ';--line:' + BRAND.line + ';--radius:4px}' +
-      '*{box-sizing:border-box;margin:0;padding:0}' +
-      'body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:#F4F6F9;-webkit-font-smoothing:antialiased;line-height:1.75}' +
-      '.wrap{max-width:960px;margin:0 auto;background:#fff}' +
-      '.masthead{background:var(--blue);color:#fff;padding:28px 32px 24px}' +
-      '.masthead-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}' +
-      '.brand{font-size:26px;font-weight:900;letter-spacing:.14em;line-height:1.2}' +
-      '.brand small{display:block;font-size:11px;font-weight:400;letter-spacing:.3em;opacity:.75;margin-top:6px}' +
-      '.issue-meta{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.08em;opacity:.9;text-align:right}' +
-      '.headline{margin-top:22px;font-size:29px;font-weight:900;line-height:1.4}' +
-      '.kw{display:inline-block;margin-top:14px;padding:4px 12px;border:1px solid rgba(255,255,255,.55);font-size:12px;letter-spacing:.12em;border-radius:100px}' +
-      '.editor{padding:32px;background:var(--blue-light);border-bottom:1px solid var(--line)}' +
-      '.editor-label{display:flex;align-items:center;gap:10px;margin-bottom:14px}' +
-      '.editor-label span{font-size:13px;font-weight:700;letter-spacing:.2em;color:var(--blue)}' +
-      '.editor-label i{flex:1;height:1px;background:var(--blue);opacity:.28}' +
-      '.editor-body{font-size:15.5px;line-height:2.05;color:#26303C;text-align:justify}' +
-      '.editor-body p+p{margin-top:14px}' +
-      '.section-label{display:flex;align-items:center;gap:10px;padding:32px 32px 0}' +
-      '.section-label span{font-size:13px;font-weight:700;letter-spacing:.2em;color:var(--blue)}' +
-      '.section-label i{flex:1;height:1px;background:var(--line)}' +
-      '.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 32px 32px}' +
-      '.card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff;transition:box-shadow .2s,transform .2s}' +
-      '.card:hover{box-shadow:0 8px 24px rgba(0,71,157,.12);transform:translateY(-2px)}' +
-      '.card-thumb{display:block;aspect-ratio:16/9;background:var(--blue-light);overflow:hidden}' +
-      '.card-thumb img{width:100%;height:100%;object-fit:cover;display:block}' +
-      '.card-body{flex:1;display:flex;flex-direction:column;padding:16px 18px 18px}' +
-      '.card-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}' +
-      '.tag-section{background:var(--blue);color:#fff;font-size:11px;font-weight:500;padding:2px 8px;letter-spacing:.06em}' +
-      '.tag-issue{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--grey)}' +
-      '.card-title{font-size:17px;font-weight:700;line-height:1.55}' +
-      '.card-title a{color:var(--ink);text-decoration:none}.card-title a:hover{color:var(--blue)}' +
-      '.card-summary{margin-top:10px;font-size:13.5px;line-height:1.9;color:#4A5563;text-align:justify}' +
-      '.card-meta{margin-top:12px;font-size:12px;color:var(--grey)}' +
-      '.card-cta{margin-top:16px}' +
-      '.btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-size:13px;font-weight:500;letter-spacing:.06em;padding:9px 16px;text-decoration:none;border-radius:var(--radius)}' +
-      '.btn:hover{background:var(--blue-dark)}' +
-      '.foot{background:#1C2430;color:#9AA6B4;padding:26px 32px;font-size:12px;line-height:1.9}' +
-      '.foot strong{color:#fff;font-weight:700;letter-spacing:.1em;display:block;margin-bottom:8px;font-size:13px}' +
-      '.foot a{color:#8FB6E6;text-decoration:none}' +
-      '.foot-src{margin-top:12px;padding-top:12px;border-top:1px solid #2C3745;font-family:"JetBrains Mono",monospace;font-size:11px;color:#6C7A8A}' +
-      '@media (max-width:720px){.masthead{padding:22px 20px 20px}.brand{font-size:22px}.headline{font-size:23px;margin-top:18px}' +
-      '.issue-meta{text-align:left}.editor{padding:24px 20px}.section-label{padding:24px 20px 0}' +
-      '.grid{grid-template-columns:1fr;gap:16px;padding:16px 20px 24px}.foot{padding:22px 20px}}' +
-      '</style></head><body><div class="wrap">' +
-      '<header class="masthead"><div class="masthead-top">' +
-      '<div class="brand">遠見線上讀<small>GLOBAL VIEWS MONTHLY</small></div>' +
-      '<div class="issue-meta">' + dateLabel + '<br>每週智能策展</div></div>' +
-      '<h1 class="headline">' + esc(title) + '</h1>' +
-      '<div class="kw">本週主題　' + esc(kw) + '</div></header>' +
-      '<section class="editor"><div class="editor-label"><span>編者的話</span><i></i></div>' +
-      '<div class="editor-body">' + (note ? paragraphs(note) : '<p style="color:#8A94A2">（尚未填寫編者的話）</p>') + '</div></section>' +
-      '<div class="section-label"><span>本週精選　' + picked.length + ' 篇</span><i></i></div>' +
-      '<div class="grid">' + cards + '</div>' +
-      '<footer class="foot"><strong>遠見線上讀｜每週智能策展</strong>' +
-      '本期文章全數選自《遠見雜誌》紙本內容，點擊卡片即可閱讀全文。' +
-      '訂閱紙本雜誌請洽 <a href="https://www.gvm.com.tw/magazine">遠見雜誌</a>。' +
-      '<div class="foot-src">選文來源：gvm.com.tw/magazine/published（紙本期別目錄）｜產出日 ' + d + '</div>' +
-      '</footer></div></body></html>';
+  function currentPayload(){
+    return {
+      title: $('title').value,
+      keyword: $('kw').value,
+      date: $('date').value || new Date().toISOString().slice(0,10),
+      campaign: $('campaign').value,
+      note: $('note').value,
+      articles: picked.map(function (p) {
+        return { i:p.i, t:p.t, y:p.y, n:p.n, m:p.m, s:p.s, a:p.a, g:imgUrl(p.g), summary:p.summary };
+      })
+    };
   }
 
   function refreshPreview(){
     if (!picked.length) return;
     $('pvhint').textContent = picked.length + ' 篇 · 即時更新';
-    var f = $('frame');
-    f.srcdoc = buildPage();
+    $('frame').srcdoc = window.GVM.buildPage(currentPayload());
   }
 
-  // ═══ AI 提示詞 ═══════════════════════════════════════════════════════════
+  function updateNoteCount(){
+    var n = chars($('note').value), el = $('noteCount');
+    el.textContent = n + ' 字';
+    el.className = 'count' + ((n && (n < 300 || n > 520)) ? ' over' : '');
+  }
+
+  // ═══ AI 潤稿提示詞 ══════════════════════════════════════════════════════
   function buildPrompt(){
     var kw = $('kw').value || '本週主題';
-    var lines = picked.map(function(p, i){
+    var lines = picked.map(function (p, i) {
       return (i+1) + '. 《' + p.t + '》\n' +
              '   出處：' + p.y + ' ' + p.n + '《' + p.m + '》｜' + p.s + '｜' + (p.a || '遠見編輯部') + '\n' +
              '   遠見官方摘要：' + (p.summary || '（無）');
     }).join('\n\n');
 
-    return '你是《遠見雜誌》的資深編輯，正在為每週電子報寫「編者的話」。\n\n' +
+    return '你是《遠見雜誌》的資深編輯，正在為每週電子報潤飾「編者的話」。\n\n' +
       '本週主題：' + kw + '\n\n' +
-      '本週選出的四篇紙本報導如下（資料皆為真實，請勿更動標題或出處）：\n\n' + lines + '\n\n' +
-      '請寫一段 300～500 字的「編者的話」，要求如下：\n' +
-      '1. 提出一個貫穿這四篇的觀點，讓讀者知道為什麼這四篇該一起讀，不要只是把四篇摘要重述一遍。\n' +
-      '2. 引用的每一個事實、數字、人名都必須來自上面提供的資料，不可自行加入任何未提供的資訊。\n' +
+      '本週選出的四篇紙本報導（資料皆為真實，請勿更動標題或出處）：\n\n' + lines + '\n\n' +
+      '以下是系統依這四篇組出的草稿：\n\n' + ($('note').value || '（尚未生成）') + '\n\n' +
+      '請把它改寫成一篇 300～500 字、讀起來像人寫的「編者的話」，要求：\n' +
+      '1. 提出一個貫穿四篇的觀點，不要只是把四篇摘要重述一遍。\n' +
+      '2. 引用的每一個事實、數字、人名都必須來自上面提供的資料，不可加入任何未提供的資訊。\n' +
       '3. 語氣專業、前瞻、有判斷力，讀者是企業決策層（金融、半導體、零售百貨、能源、傳產製造業）。\n' +
-      '4. 用繁體中文台灣用語。用空行分段，約三到五段。\n' +
-      '5. 只輸出編者的話本文，不要加標題、不要加開場白、不要說明你做了什麼。';
+      '4. 繁體中文台灣用語，用空行分段，約三到五段。\n' +
+      '5. 只輸出編者的話本文，不要加標題、不要開場白、不要說明你做了什麼。';
   }
 
-  // ═══ 事件 ═══════════════════════════════════════════════════════════════
-  function doSearch(){
+  // ═══ 主流程 ═════════════════════════════════════════════════════════════
+  function doGenerate(){
     var kw = $('kw').value.trim();
-    if (!kw) { $('status').textContent = '請先輸入一個主題'; $('status').className = 'status err'; return; }
-    var opts = {
-      since: parseInt($('since').value, 10) || 0,
-      recency: $('recency').checked
-    };
-    var res = search(kw, opts);
+    if (!kw) { $('status').className = 'status err'; $('status').textContent = '請先輸入一個主題'; return; }
+
+    var res = search(kw, { since: parseInt($('since').value,10) || 0, recency: $('recency').checked });
     pool = res.results;
 
     if (!pool.length) {
@@ -595,40 +530,39 @@
       return;
     }
 
-    var chosen = autoPick(pool, PICK_N, $('diverse').checked);
-    picked = chosen.map(function(r){
-      var o = {};
-      for (var k in r) o[k] = r[k];
-      o.summary = r.e || '';   // 預填遠見官方摘要，真實內容
+    picked = autoPick(pool, PICK_N, $('diverse').checked).map(function (r) {
+      var o = {}; for (var k in r) o[k] = r[k];
+      o.summary = r.e || '';
       return o;
     });
 
-    if (!$('title').value.trim()) $('title').value = kw + '：本週四篇《遠見》紙本精選';
+    $('title').value = kw + '：本週四篇《遠見》紙本精選';
+    regenSeed = 0;
+    $('note').value = generateNote(kw);
+    updateNoteCount();
 
     $('status').className = 'status';
     $('status').textContent = '索引 ' + DATA.length.toLocaleString() + ' 篇｜命中 ' + pool.length +
-      ' 篇｜擴充關鍵詞：' + res.terms.slice(0, 8).join('、') + (res.terms.length > 8 ? '…' : '');
+      ' 篇｜擴充關鍵詞：' + res.terms.slice(0,8).join('、') + (res.terms.length > 8 ? '…' : '');
 
-    var noSum = picked.filter(function(p){ return !p.summary; }).length;
     renderPicked(); renderCands(); refreshPreview();
-    if (noSum) toast('已選 4 篇，其中 ' + noSum + ' 篇沒有官方摘要，請自行補寫');
-    else toast('已選出 4 篇');
+
+    var noSum = picked.filter(function (p) { return !p.summary; }).length;
+    toast(noSum ? ('已產生，其中 ' + noSum + ' 篇沒有官方摘要，請補寫') : '已產生四篇選文與編者的話');
   }
 
   function bind(){
-    $('go').addEventListener('click', doSearch);
-    $('kw').addEventListener('keydown', function(e){ if (e.key === 'Enter') doSearch(); });
+    $('go').addEventListener('click', doGenerate);
+    $('kw').addEventListener('keydown', function (e) { if (e.key === 'Enter') doGenerate(); });
 
-    // 熱門主題
     var CHIPS = ['半導體','AI概念股','永續金融','高齡社會','人才育才','能源轉型','零售消費','地緣政治'];
-    $('chips').innerHTML = CHIPS.map(function(c){ return '<button class="chip">' + c + '</button>'; }).join('');
-    $('chips').addEventListener('click', function(e){
+    $('chips').innerHTML = CHIPS.map(function (c) { return '<button class="chip">' + c + '</button>'; }).join('');
+    $('chips').addEventListener('click', function (e) {
       var b = e.target.closest('.chip'); if (!b) return;
-      $('kw').value = b.textContent; doSearch();
+      $('kw').value = b.textContent; doGenerate();
     });
 
-    // 選中四篇的操作
-    $('pickedWrap').addEventListener('input', function(e){
+    $('pickedWrap').addEventListener('input', function (e) {
       var ta = e.target.closest('.pick-sum'); if (!ta) return;
       var i = +ta.dataset.i;
       picked[i].summary = ta.value;
@@ -636,27 +570,27 @@
       if (c) { c.textContent = chars(ta.value) + ' 字'; c.className = 'count' + (chars(ta.value) > 170 ? ' over' : ''); }
       refreshPreview();
     });
-    $('pickedWrap').addEventListener('click', function(e){
+
+    $('pickedWrap').addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]'); if (!b) return;
-      var i = +b.dataset.i, act = b.dataset.act;
+      var i = +b.dataset.i, act = b.dataset.act, tmp;
       if (act === 'swap') {
         swapIndex = i; $('swapTarget').textContent = i + 1;
         $('candsWrap').scrollIntoView({ behavior:'smooth', block:'nearest' });
         toast('點下方任一篇，替換第 ' + (i+1) + ' 篇');
       } else if (act === 'up' && i > 0) {
-        var t = picked[i-1]; picked[i-1] = picked[i]; picked[i] = t;
+        tmp = picked[i-1]; picked[i-1] = picked[i]; picked[i] = tmp;
         renderPicked(); refreshPreview();
       } else if (act === 'down' && i < picked.length - 1) {
-        var t2 = picked[i+1]; picked[i+1] = picked[i]; picked[i] = t2;
+        tmp = picked[i+1]; picked[i+1] = picked[i]; picked[i] = tmp;
         renderPicked(); refreshPreview();
       }
     });
 
-    // 候選替換
-    $('cands').addEventListener('click', function(e){
+    $('cands').addEventListener('click', function (e) {
       var b = e.target.closest('.cand'); if (!b) return;
       var id = +b.dataset.id;
-      if (picked.some(function(p){ return p.i === id; })) { toast('這篇已經在名單裡了'); return; }
+      if (picked.some(function (p) { return p.i === id; })) { toast('這篇已經在名單裡了'); return; }
       var rec = null;
       for (var i = 0; i < pool.length; i++) if (pool[i].rec.i === id) { rec = pool[i].rec; break; }
       if (!rec) return;
@@ -664,71 +598,74 @@
       o.summary = rec.e || '';
       picked[swapIndex] = o;
       renderPicked(); renderCands(); refreshPreview();
-      toast('已替換第 ' + (swapIndex + 1) + ' 篇');
+      toast('已替換第 ' + (swapIndex+1) + ' 篇，可按「重新生成」更新編者的話');
     });
 
-    // 文案
-    $('note').addEventListener('input', function(){
-      var n = chars(this.value);
-      var el = $('noteCount');
-      el.textContent = n + ' 字';
-      el.className = 'count' + ((n && (n < 300 || n > 500)) ? ' over' : '');
-      refreshPreview();
-    });
-    ['title','campaign','date'].forEach(function(id){
-      $(id).addEventListener('input', refreshPreview);
+    $('note').addEventListener('input', function () { updateNoteCount(); refreshPreview(); });
+    ['title','campaign','date'].forEach(function (id) { $(id).addEventListener('input', refreshPreview); });
+
+    $('regenBtn').addEventListener('click', function () {
+      if (!picked.length) { toast('請先產生選文'); return; }
+      regenSeed++;
+      $('note').value = generateNote($('kw').value.trim() || '本週主題');
+      updateNoteCount(); refreshPreview();
+      toast('已依目前四篇重新組稿');
     });
 
-    // AI 提示詞
-    $('promptBtn').addEventListener('click', function(){
-      if (!picked.length) { toast('請先選文'); return; }
+    $('promptBtn').addEventListener('click', function () {
+      if (!picked.length) { toast('請先產生選文'); return; }
+      $('dlgTitle').textContent = 'AI 潤稿提示詞';
+      $('dlgNote').textContent = '已把四篇的真實標題、期別、官方摘要與目前的草稿組進去了。貼到任何 AI（ChatGPT／Gemini／Claude 都可以），把回覆貼回「導讀內文」即可。因為資料都在提示詞裡，AI 只負責潤飾文字、不需要自己查資料。';
       $('dlgTxt').value = buildPrompt();
+      $('dlgTxt').hidden = false; $('dlgUrl').hidden = true;
+      $('dlgCopy').dataset.src = 'txt';
       $('dlg').showModal();
     });
-    $('dlgX').addEventListener('click', function(){ $('dlg').close(); });
-    $('dlgCopy').addEventListener('click', function(){ copyText($('dlgTxt').value, '已複製，貼到任何 AI 即可'); });
 
-    // 預覽切換
-    $('vwDesk').addEventListener('click', function(){
+    $('dlgX').addEventListener('click', function () { $('dlg').close(); });
+    $('dlgCopy').addEventListener('click', function () {
+      var src = $('dlgCopy').dataset.src === 'url' ? $('dlgUrl').value : $('dlgTxt').value;
+      copyText(src, src.indexOf('http') === 0 ? '連結已複製，可直接傳給同事' : '已複製，貼到任何 AI 即可');
+    });
+
+    $('vwDesk').addEventListener('click', function () {
       $('frame').style.maxWidth = '100%'; $('vwDesk').classList.add('on'); $('vwMob').classList.remove('on');
     });
-    $('vwMob').addEventListener('click', function(){
+    $('vwMob').addEventListener('click', function () {
       $('frame').style.maxWidth = '390px'; $('vwMob').classList.add('on'); $('vwDesk').classList.remove('on');
     });
 
-    // 匯出
-    $('dlBtn').addEventListener('click', function(){
-      if (!picked.length) { toast('請先選文'); return; }
-      var d = $('date').value || new Date().toISOString().slice(0,10);
-      var slug = ($('kw').value || 'weekly').replace(/[\\/:*?"<>|\s]+/g, '-').slice(0, 24);
-      var blob = new Blob([buildPage()], { type: 'text/html;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = d + '_' + slug + '.html';
-      document.body.appendChild(a); a.click();
-      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-      toast('已下載');
+    // 分享連結：把資料壓進網址，不需要伺服器也能傳給別人看
+    $('shareBtn').addEventListener('click', function () {
+      if (!picked.length) { toast('請先產生選文'); return; }
+      window.GVM.encode(currentPayload()).then(function (code) {
+        var url = location.origin + location.pathname.replace(/index\.html$/, '') + 'view.html#' + code;
+        $('dlgTitle').textContent = '分享連結';
+        $('dlgNote').textContent = '這是一條可以直接傳給同事的網址（' + url.length + ' 字元）。整份內容都壓在網址裡，對方打開就能看到成品，不需要登入或安裝任何東西。';
+        $('dlgUrl').value = url;
+        $('dlgUrl').hidden = false; $('dlgTxt').hidden = true;
+        $('dlgCopy').dataset.src = 'url';
+        $('dlg').showModal();
+        copyText(url, '分享連結已複製');
+      }).catch(function (e) { toast('產生連結失敗：' + e.message); });
     });
-    $('copyBtn').addEventListener('click', function(){
-      if (!picked.length) { toast('請先選文'); return; }
-      copyText(buildPage(), '整份 HTML 已複製');
-    });
+
   }
 
   // ═══ 啟動 ═══════════════════════════════════════════════════════════════
-  $('date').value = new Date().toISOString().slice(0, 10);
+  $('date').value = new Date().toISOString().slice(0,10);
 
   fetch('data/index.json')
-    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(function(j){
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function (j) {
       DATA = j.articles; IMG_PREFIX = j.imgPrefix || '';
-      var years = DATA.map(function(r){ return r.y.slice(0,4); }).filter(Boolean).sort();
+      var years = DATA.map(function (r) { return r.y.slice(0,4); }).filter(Boolean).sort();
       $('idxnote').textContent = DATA.length.toLocaleString() + ' 篇紙本文章 · ' + years[0] + '–' + years[years.length-1];
       $('go').disabled = false;
       $('status').textContent = '索引已就緒，輸入主題即可開始';
       bind();
     })
-    .catch(function(e){
+    .catch(function (e) {
       $('idxnote').textContent = '索引載入失敗';
       $('status').className = 'status err';
       $('status').textContent = '索引載入失敗：' + e.message + '（請重新整理）';

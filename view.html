@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>遠見線上讀</title>
+<meta name="robots" content="noindex">
+<style>
+  body{margin:0;background:#F4F6F9;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:#1A1A1A}
+  .box{max-width:520px;margin:14vh auto;padding:36px 32px;background:#fff;border:1px solid #DDE3EC;border-radius:6px;text-align:center}
+  .box h1{font-size:17px;color:#00479D;letter-spacing:.1em;margin:0 0 14px}
+  .box p{font-size:14px;line-height:1.9;color:#6B7280;margin:0}
+  .box a{display:inline-block;margin-top:20px;background:#00479D;color:#fff;text-decoration:none;
+    padding:11px 22px;border-radius:4px;font-size:13.5px}
+  .spin{width:26px;height:26px;border:3px solid #E8EFF7;border-top-color:#00479D;border-radius:50%;
+    margin:0 auto 18px;animation:s .8s linear infinite}
+  @keyframes s{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){ .spin{animation:none} }
+</style>
+</head>
+<body>
+
+<div class="box" id="box">
+  <div class="spin"></div>
+  <h1>遠見線上讀</h1>
+  <p>正在載入這份導讀…</p>
+</div>
+
+<script src="assets/gvm-render.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function fail(msg, showHome){
+    document.getElementById('box').innerHTML =
+      '<h1>打不開這份導讀</h1><p>' + window.GVM.esc(msg) + '</p>' +
+      (showHome === false ? '' : '<a href="./">開啟產生器</a>');
+  }
+
+  var hash = location.hash.replace(/^#/, '');
+  if (!hash) { fail('這個網址沒有帶內容。請向提供連結的人索取完整網址，通常會很長。'); return; }
+
+  Promise.all([
+    window.GVM.decode(hash),
+    fetch('data/index.json').then(function (r) {
+      if (!r.ok) throw new Error('索引載入失敗 HTTP ' + r.status);
+      return r.json();
+    })
+  ]).then(function (res) {
+    var payload = res[0], idx = res[1];
+    var prefix = idx.imgPrefix || '';
+
+    // 用文章 id 去索引取官方資料：標題、期別、作者、配圖一律以索引為準，
+    // 網址裡只帶得動 id 與人寫的文字，所以連結不可能夾帶偽造的文章。
+    var byId = {};
+    for (var i = 0; i < idx.articles.length; i++) byId[idx.articles[i].i] = idx.articles[i];
+
+    var missing = [];
+    var articles = payload.articles.map(function (a) {
+      var rec = byId[a.i];
+      if (!rec) { missing.push(a.i); return null; }
+      return {
+        i: rec.i, t: rec.t, y: rec.y, n: rec.n, m: rec.m, s: rec.s, a: rec.a,
+        g: rec.g ? (/^https?:/.test(rec.g) ? rec.g : prefix + rec.g) : '',
+        summary: a.summary || rec.e || ''
+      };
+    }).filter(Boolean);
+
+    if (!articles.length) {
+      fail('連結裡的文章都不在紙本索引中（id ' + missing.join('、') + '），無法顯示。');
+      return;
+    }
+
+    payload.articles = articles;
+    var html = window.GVM.buildPage(payload);
+
+    // 用 DOMParser 換掉頁面內容，而不是 document.write。
+    // document.write 會在文件已載入後重建 DOM，圖片與樣式的載入時機容易出問題。
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    document.title = doc.title;
+    document.head.innerHTML = doc.head.innerHTML;
+    document.body.innerHTML = doc.body.innerHTML;
+    document.documentElement.lang = 'zh-Hant-TW';
+  }).catch(function (e) {
+    fail(e && e.message ? e.message : '連結內容無法解析，可能是複製時被截斷了。');
+  });
+})();
+</script>
+</body>
+</html>
